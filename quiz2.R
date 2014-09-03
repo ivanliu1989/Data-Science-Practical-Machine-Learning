@@ -50,3 +50,9 @@ str(training[,58:69])
 pca <- preProcess(training[,58:69], method='pca')
 pca.p <- predict(pca,training[,58:69])
 plot(pca.p)
+prcomp(training[,58:69])
+pca$rotation
+plot(prcomp(training[,58:69]))
+# svm
+svd1 <- svd(scale(training[,58:69]))
+plot(svd1$d^2/sum(svd1$d^2))
