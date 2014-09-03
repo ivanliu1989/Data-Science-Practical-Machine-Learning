@@ -16,6 +16,31 @@ featurePlot(x=training[,c('age','education','jobclass')],
             plot='pairs')
 dev.off()
 png('feature2.png')
-qplot(age,wage,data=training, colour=jobclass)
+qq <- qplot(age,wage,data=training, colour=jobclass)
 dev.off()
 
+png('feature3.png')
+qq <- qplot(age,wage,data=training, colour=education)
+qq+geom_smooth(method='lm',formula=y~x)
+dev.off()
+##
+library(Hmisc)
+cutWage <- cut2(training$wage, g=3)
+table(cutWage)
+png('feature4.png')
+p1<-qplot(cutWage,age,data=training, fill=cutWage,geom=c('boxplot'))
+p1
+dev.off()
+##
+png('feature5.png')
+p2<-qplot(cutWage,age,data=training, fill=cutWage,geom=c('boxplot','jitter'))
+p2
+dev.off()
+##
+t1 <- table(cutWage, training$jobclass)
+t1
+prop.table(t1,1)
+
+png('feature6.png')
+qplot(wage,colour=education,data=training, geom='density')
+dev.off()
