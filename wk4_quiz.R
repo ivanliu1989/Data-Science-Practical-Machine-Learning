@@ -52,6 +52,7 @@ set.seed(233)
 fit <- train(CompressiveStrength~., method='lasso', data=training)
 fit
 ?plot.enet
+
 data(diabetes)
 attach(diabetes)
 object <- enet(x,y,lambda=1)
@@ -59,3 +60,35 @@ par(mfrow=c(2,2))
 plot(object)
 plot(object,xvar="step")
 detach(diabetes)
+
+
+# Q4
+library(lubridate)  # For year() function below
+dat = read.csv("gaData.csv")
+training = dat[year(dat$date) < 2012,]
+testing = dat[(year(dat$date)) > 2011,]
+tstrain = ts(training$visitsTumblr)
+tstrain = ts(training$visitsTumblr)
+library(forecast)
+fit <- bats(tstrain)
+fit
+pred <- forecast(fit,h = 300,level =95)
+par(mfcol=c(1,1))
+png('Q4.png')
+plot(pred)
+lines(testing)
+dev.off()
+
+# Q5
+set.seed(3523)
+library(AppliedPredictiveModeling)
+data(concrete)
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+training = concrete[ inTrain,]
+testing = concrete[-inTrain,]
+set.seed(325)
+require(e1071)
+fit <- svm(CompressiveStrength~., training)
+pred <- predict(fit, testing)
+# confusionMatrix(as.vector(pred), testing$CompressiveStrength)
+(sum((pred-testing$CompressiveStrength)^2))
